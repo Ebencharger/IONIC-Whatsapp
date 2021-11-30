@@ -1,0 +1,95 @@
+<main class="row">
+  <div class="col-sm">
+    <div class="body">
+      <div *ngIf="menu" class="option">
+          <p>Add to Contacts</p>
+          <p>Media, links, and docs</p>
+          <p>Search</p>
+          <p>Mute notification</p>
+          <p>Wallpaper</p>
+      </div>
+      <div *ngIf="menuTwo"  class="option2">
+        <div class="optionHolder"><i class="fa fa-file"></i><span class="spanOne">Document</span></div>
+        <div class="optionHolder"><i class="fa fa-camera"></i><span class="spanTwo">Camera</span></div>
+        <div class="optionHolder"><i class="fa fa-photo"></i><span class="spanThree">Gallery</span></div>
+        <div class="optionHolder"><i class="fa fa-music"></i><span class="spanFour">Audio</span></div> 
+        <div class="optionHolder"><i class="fa fa-map-marker"></i><span class="spanFive">Location</span></div>
+        <div class="optionHolder"><i class="fa fa-user"></i><span class="spanSix">Contact</span></div>
+      </div>
+      <div *ngIf="callit" class="callchat text-white">
+          <div class="up">
+            <div class=""><i class="fa fa-angle-down"></i></div>
+        <div class="host">
+          <div class="ml-3"><i class="fa fa-lock"></i><span class="ml-1">End to-end encrypted</span></div>
+          <div class="callee"><p>{{myService.chatsArray[myIndex].sender}}</p></div>
+          <p class="calling">{{stat}}</p>
+        </div>
+        <div></div>
+          </div>
+        <div class="center">
+         <img src={{myService.chatsArray[myIndex].img}} alt="">
+         <i (click)="handleHangUp()" class="fa fa-phone"></i>
+        </div>
+        <div class="down">
+          <i class="fa fa-volume-off"></i>
+          <i class="fa fa-tv"></i>
+          <i class="fa fa-microphone-slash"></i>
+        </div>
+       </div>
+      <div (click)="handleClickBThree()" class="header d-flex">
+        <div class="ml-2">
+         <div (click)="handleRoute()">
+          <i class="fa fa-arrow-left"></i>
+         </div>
+         <div class="picholder">
+          <img src={{myService.chatsArray[myIndex].img}} alt="">
+         </div>
+         <div class="mt-4">
+           <h5 class="ml-2">{{myService.chatsArray[myIndex].sender}}</h5>
+           <p style="margin-top: -10px;" class="ml-2" >{{myService.chatsArray[myIndex].status}}</p>
+         </div>
+        </div>
+        <div>
+         <i (click)="handleVideo()" class="fa fa-tv"></i>
+         <i (click)="handleCallme()" class="fa fa-phone"></i>
+         <i (click)="handleMenu()" class="fa fa-ellipsis-v"></i>
+        </div>
+      </div>
+
+      <div class="bodymessage" (click)="handleClickBTwo()" (click)="handleClickB()" (click)="handleCan()">
+       <div class="holdmessage" *ngFor="let message of myService.chatsArray[myIndex].message">
+        <p class="p">{{message.message}}</p>
+        <p class="mytime font-weight-bold w-100">{{message.time}}<i class="fa fa-check text-primary"></i><i class="fa fa-check fat text-primary"></i></p>
+       </div>
+
+       <div style="background-color: rgb(196, 212, 204); margin-left: 10%;" class="holdmessage" *ngFor="let message of myService.chatsArray[myIndex].myres">
+        <p>{{message}}</p>
+       </div>
+      </div>
+
+      <form class="bottom" [formGroup]="forms">
+        <div class="d-flex">
+          <textarea formControlName="message" style="font-size: 18px;" (input)="handleSel()" name="" >
+          </textarea>
+          <input disabled *ngIf="see" type="text" placeholder="Type a message">
+          <i *ngIf="!seen" class="fa fa-microphone text-white"></i>
+          <i *ngIf="seen" class="fa fa-send text-white"></i>
+          <div class="over">
+            <div class="d-flex">
+             <i class="fa fa-home"></i>
+            </div>
+           </div>
+           <div  class="overt">
+            <div class="d-flex">
+              <i (click)="handleMenuTwo()" class="fa fa-paperclip"></i>
+              <i (click)="handleCamera()" *ngIf="see" class="fa fa-camera ml-3"></i>
+            </div>
+           </div>
+        </div>
+      </form>
+     
+
+    </div>
+  </div>
+</main>
+<router-outlet></router-outlet>

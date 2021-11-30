@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  @ViewChildren(RouterOutlet) routerOutlets: QueryList<RouterOutlet>;
+  constructor(private platform:Platform) {
+    this.platform.backButton.subscribe(() => {
+      console.log("TEST");
+    });
+  }
 }
