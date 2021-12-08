@@ -1,24 +1,55 @@
 <main class="row">
   <main class="col-sm">
     <div class="body">
-      <div class="myheader">
+      <div *ngIf="menu" class="option">
+        <p>Invite a friend</p>
+        <p>Contacts</p>
+        <p>Refresh</p>
+        <p>Meet me</p>
+        <p>Help</p>
+      </div>
+
+      <div *ngIf="menuTwo" class="option2">
+        <form class="d-flex" [formGroup]="forms">
+          <i (click)="handleClickBTwo()" class="fa fa-arrow-left"></i>
+          <input formControlName="message" (input)="handleSearch()" placeholder="Search..." />
+          <div *ngIf="search" class="searchchat">
+            <span *ngIf="isee" class="ml-2">No result found</span>
+            <div (click)="handleCli(indexSer)" *ngFor="let chat of searchchat, let j=index" class="eachchat">
+              <div class="picholder">
+                <img src={{chat.img}} alt="">
+              </div>
+              <div class="messageholder">
+                <h5 class="mt-2">{{chat.sender}}</h5>
+                <p class="mychat">{{chat.myword}}</p>
+              </div>
+              <div class="time">
+              </div>
+              <div></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+      <div (click)="handleClickB()" class="myheader">
         <div routerLink="/home">
           <i class="fa fa-arrow-left"></i>
         </div>
 
         <div class="mt-4">
           <h5>Select contact</h5>
-          <p>{{myService.chatsArray.length}} contacts</p>
+          <p>{{contactList.length}} contacts</p>
         </div>
 
         <div class="">
-          <i class="fa fa-search"></i>
-          <i class="fa fa-ellipsis-v ml-3 mt-1"></i>
+          <i (click)="handleMenuTwo()" class="fa fa-search"></i>
+          <i (click)="handleMenu()" class="fa fa-ellipsis-v ml-3 mt-1"></i>
         </div>
 
       </div>
 
-      <div class="classBody">
+      <div (click)="handleClickB()" class="classBody">
         <div class="newcontact d-flex">
           <div class="d-flex">
             <i class="fa fa-users"></i>
@@ -38,7 +69,22 @@
           <div>
             <i class="fa fa-barcode"></i>
           </div>
-
+        </div>
+        <div routerLink="/room/{{i}}" *ngFor="let chat of contactList, let i=index" class="eachchat">
+          <div class="picholder">
+            <img src={{chat.img}} alt="">
+          </div>
+          <div class="messageholder">
+            <h5 class="mt-2 ">{{chat.sender}}</h5>
+            <p class="mychat">{{chat.myword}}</p>
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
 
         </div>
       </div>

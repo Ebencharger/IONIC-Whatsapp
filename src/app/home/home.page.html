@@ -10,20 +10,56 @@
       </div>
       <div *ngIf="menuTwo" class="option2">
         <form class="d-flex" [formGroup]="forms">
-          <i (click)="handleMenuTwo()" class="fa fa-arrow-left"></i>
+          <i (click)="handleClickBTwo()" class="fa fa-arrow-left"></i>
           <input formControlName="message"  (input)="handleSearch()" placeholder="Search..."/>
           <div *ngIf="search" class="searchchat">
-            <span *ngIf="isee" class="ml-2">No result found</span>
+            <span  class="ml-2">{{isee}}</span>
             <div (click)="handleCli(indexSer)" *ngFor="let chat of searchchat, let j=index"  class="eachchat">
               <div class="picholder">
                 <img src={{chat.img}} alt="">
               </div>
               <div class="messageholder">
-                <h5 class="mt-2 text-center">{{chat.sender}}</h5>
+                <h5 class="mt-2">{{chat.sender}}</h5>
                 <p class="mychat">{{chat.message[0].message | slice:0:15}}...</p>
               </div>
               <div class="time">
                 <p class="mt-3">{{chat.time}}</p>
+              </div>
+            </div>
+            </div>
+          <div *ngIf="searchTwo" class="searchchat p-2">
+            <span class="ml-2">Recent Updates</span>
+            <hr>
+            <span  class="ml-2">{{isee}}</span>
+            <div (click)="handleCliTwo(j)" *ngFor="let chat of searchchat, let j=index"  class="eachchat">
+              <div class="picholder">
+                <img *ngIf="chat.mystat=='image'" class="sta" src={{chat.img}} alt="">
+                <div *ngIf="chat.mystat=='message'"class="statt bg-danger">>{{chat.status}}</div>
+              </div>
+              <div class="messageholder">
+                <h5 class="mt-2">{{chat.sender}}</h5>
+                <p>{{chat.time}}</p>
+              </div>
+              <div class="time"></div>
+              <div class="time"></div>
+              <div class="time"></div>
+            </div>
+            </div>
+          <div *ngIf="searchThree" class="searchchat p-2">
+            <span  class="ml-2">{{isee}}</span>
+            <div (click)="handleCliThree(j)" *ngFor="let chat of searchchat, let j=index"  class="eachchat">
+              <div class="picholder">
+                <img src={{chat.img}} alt="">
+              </div>
+              <div class="messageholder">
+                <h5 class="mt-2">{{chat.sender}}</h5>
+                <p class="mychat"><i *ngIf="chat.detail=='received'" style="color:#1AC0A3;margin-left: -5px;"
+                    class="fa fa-long-arrow-down"></i><i *ngIf="chat.detail=='missed'" style="color:red; margin-left: -5px;"
+                    class="fa fa-long-arrow-down"></i><i *ngIf="chat.detail=='call'" style="color:#1AC0A3;margin-left: -5px;"
+                    class="fa fa-long-arrow-up"></i>{{chat.date}},{{chat.time}}</p>
+              </div>
+              <div (click)="handleCallme(q)" class="time" style="margin-top: 10px;">
+                <i class="fa fa-phone"></i>
               </div>
             </div>
             </div>
@@ -51,13 +87,13 @@
               <i (click)="handleCamera()" class="fa fa-camera"></i>
             </a>
           </li>
-          <li class="nav-item">
+          <li (click)="handleCheckme()"  class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#chats">CHATS</a>
           </li>
-          <li class="nav-item">
+          <li (click)="handleCheckmeone()" class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#status">STATUS</a>
           </li>
-          <li class="nav-item">
+          <li (click)="handleCheckmetwo()" class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#calls">CALLS</a>
           </li>
 
@@ -67,20 +103,20 @@
 
       <div class="tab-content">
         <div class="tab-pane container" id="camera">
-         <p (click)="getContacts()">contact</p>
+         <!-- <p (click)="getContacts()">contact</p> -->
         </div>
 
         <div class="tab-pane container active" id="chats">
-          <div class="float d-flex justify-content-center align-items-center">
-            <i routerLink="/newcontact" class="fa fa-comment"></i>
+          <div routerLink="/newcontact" class="float d-flex justify-content-center align-items-center">
+            <i class="fa fa-comment"></i>
           </div>
           <div routerLink="/room/{{i}}" *ngFor="let chat of chatsArray, let i=index" class="eachchat">
             <div class="picholder">
               <img src={{chat.img}} alt="">
             </div>
             <div class="messageholder">
-              <h5 class="mt-2 text-center">{{chat.sender}}</h5>
-              <p class="mychat">{{chat.message[0].message | slice:0:15}}...</p>
+              <h5 class="mt-2">{{chat.sender}}</h5>
+              <p class="mychat">{{chat.message[chat.message.length-1].message | slice:0:15}}...</p>
             </div>
             <div class="time">
               <p class="mt-3">{{chat.time}}</p>
@@ -88,13 +124,69 @@
           </div>
         </div>
         <div class="tab-pane container" id="status">
+          <div *ngIf="status" class="statusview">
+            <div [hidden]="hide" class="probar">
+             <div id="bar" [style.width]="width" class="bar"></div>
+             </div>
+             <div [hidden]="hide" class="ml-2">
+              <div (click)="handleRoute()" class="ml-2">
+               <i class="fa fa-arrow-left"></i>
+              </div>
+              <div class="picholder d-flex">
+               <img class="mt-4" src={{myService.statusArray[statusIndex].myImg}} alt="">
+               <div class="mt-4">
+                <h5 class="ml-2">{{myService.statusArray[statusIndex].sender}}</h5>
+                <p style="margin-top: -10px;" class="ml-2" >{{myService.statusArray[statusIndex].time}}</p>
+              </div>
+              </div>
+              <div class="adjust">
+                <i class="fa fa-ellipsis-v"></i>
+               </div>
+             </div>
+             <div (pointerdown)="handlePause()" (pointerup)="handleStart()" class="holdme">
+              <img *ngIf="myService.statusArray[statusIndex].mystat=='image'" src={{myService.statusArray[statusIndex].img}} alt="">
+              <div *ngIf="myService.statusArray[statusIndex].mystat=='message'" class="messa">{{myService.statusArray[statusIndex].status}}</div>
+             </div>
+             <div class="text-white down">
+               <div class="chevup"><i class="fa fa-chevron-up"></i></div>
+               <div class="reply"><p>REPLY</p></div>
+             </div>
+          </div>
+          <div *ngIf="statusTwo" class="statusview">
+            <div [hidden]="hide" class="probar">
+             <div id="bar" [style.width]="width" class="bar"></div>
+            </div>
+            <div [hidden]="hide" class="ml-2">
+              <div (click)="handleRoute()" class="ml-2">
+               <i class="fa fa-arrow-left"></i>
+              </div>
+              <div class="picholder d-flex">
+               <img class="mt-4" src="../../assets/Eben.jpg" alt="">
+               <div class="mt-4">
+                <h5 class="ml-2">My status</h5>
+                <p style="margin-top: -10px;" class="ml-2" >Today, 11:55 AM</p>
+              </div>
+              </div>
+              <div class="adjust">
+                <i class="fa fa-ellipsis-v"></i>
+               </div>
+             </div>
+             <div (mousedown)="handlePause()" (mouseup)="handleStart()" class="holdme">
+              <img  src="../../assets/Eben.jpg" alt="">
+              <!-- <div *ngIf="myService.statusArray[statusIndex].mystat=='message'" class="messa">{{myService.statusArray[statusIndex].status}}</div> -->
+             </div>
+             <div class="text-white down">
+               <div class="chevup"><i class="fa fa-eye"></i></div>
+               <div class="reply"><p>100</p></div>
+             </div>
+          </div>
           <div class="float pencil d-flex justify-content-center align-items-center">
             <i class="fa fa-pencil"></i>
           </div>
           <div class="float d-flex justify-content-center align-items-center">
             <i class="fa fa-camera"></i>
           </div>
-          <div class="eachchat">
+          <div (click)="handleMyStatus()" class="eachchat">
             <div class="picholder">
               <img class="sta" src="../../assets/Eben.jpg" alt="">
             </div>
@@ -109,9 +201,10 @@
           <div>
             <p class="mb-3">Recent Updates</p>
           </div>
-          <div *ngFor="let chat of statusArray" class="eachchat">
+          <div (click)="handleStatus(i)" *ngFor="let chat of statusArray; let i=index" class="eachchat">
             <div class="picholder">
-              <img class="sta" src={{chat.img}} alt="">
+              <img *ngIf="chat.mystat=='image'" class="sta" src={{chat.img}} alt="">
+              <div *ngIf="chat.mystat=='message'" class="statt bg-danger">{{chat.status}}</div>
             </div>
             <div class="messageholder holdit">
               <h5 class="mt-2">{{chat.sender}}</h5>
@@ -123,10 +216,30 @@
         </div>
 
         <div class="tab-pane container" id="calls">
+          <div *ngIf="callit" class="callchat text-white">
+            <div class="up">
+              <div class=""><i class="fa fa-angle-down"></i></div>
+          <div class="host">
+            <div class="ml-3"><i class="fa fa-lock"></i><span class="ml-1">End to-end encrypted</span></div>
+            <div class="callee"><p>{{myService.callArray[myIndex].sender}}</p></div>
+            <p class="calling">{{stat}}</p>
+          </div>
+          <div></div>
+            </div>
+          <div class="center">
+           <img src={{myService.callArray[myIndex].img}} alt="">
+           <i (click)="handleHangUp()" class="fa fa-phone"></i>
+          </div>
+          <div class="down">
+            <i class="fa fa-volume-off"></i>
+            <i class="fa fa-tv"></i>
+            <i class="fa fa-microphone-slash"></i>
+          </div>
+         </div>
           <div class="float d-flex justify-content-center align-items-center">
             <i class="fa fa-phone"></i>
           </div>
-          <div *ngFor="let chat of callArray" class="eachchat">
+          <div *ngFor="let chat of callArray; let q=index" class="eachchat">
             <div class="picholder">
               <img src={{chat.img}} alt="">
             </div>
@@ -137,7 +250,7 @@
                   class="fa fa-long-arrow-down"></i><i *ngIf="chat.detail=='call'" style="color:#1AC0A3;"
                   class="fa fa-long-arrow-up"></i>{{chat.date}},{{chat.time}}</p>
             </div>
-            <div class="time">
+            <div (click)="handleCallme(q)" class="time">
               <i class="fa fa-phone"></i>
             </div>
           </div>

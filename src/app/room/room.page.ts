@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Platform } from '@ionic/angular';
 import { MyserviceService } from '../myservice.service';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
 
 @Component({
   selector: 'app-room',
@@ -15,11 +18,17 @@ export class RoomPage implements OnInit {
   picture:any;
   seen=false;
   callit=false;
+  stat="Calling"
   menu=false;
   me=0;
   menuTwo=false;
-  stat="Calling"
-  constructor(private route: ActivatedRoute, public myService: MyserviceService, private route2: Router, private fb: FormBuilder,private camera:Camera) {}
+  
+ 
+  constructor(private route: ActivatedRoute, public myService: MyserviceService, private route2: Router, private fb: FormBuilder,private camera:Camera, private platform:Platform,private nativeStorage: NativeStorage) {
+    this.platform.backButton.subscribeWithPriority(10000, () => {
+      this.route2.navigate(['home'])
+    });
+  }
   forms=this.fb.group({ message: ["", [Validators.required]] });
   get message(){
    return this.forms.get('message')
@@ -122,5 +131,18 @@ handleClickBThree(){
     this.menu=false;
     }
 }
-
+handleMessage(){
+  let {message}=this.forms.value;
+  this.myService.chatsArray[this.myIndex].myres.push({message:message, time:this.myService.time})
+  this.nativeStorage.setItem('whatsapp', JSON.stringify(this.myService.chatsArray))
+      .then(
+        () => console.log('Stored item!'),
+        error => console.error('Error storing item', error)
+      );
+  this.forms.get('message')?.setValue([""]);
+  if (this.forms.get('message').value=="") {
+    this.see=true;
+    this.seen=false;
+  }
+}
 }

@@ -59,11 +59,12 @@
       <div class="bodymessage" (click)="handleClickBTwo()" (click)="handleClickB()" (click)="handleCan()">
        <div class="holdmessage" *ngFor="let message of myService.chatsArray[myIndex].message">
         <p class="p">{{message.message}}</p>
-        <p class="mytime font-weight-bold w-100">{{message.time}}<i class="fa fa-check text-primary"></i><i class="fa fa-check fat text-primary"></i></p>
+        <p class="mytime font-weight-bold w-100">{{message.time}}</p>
        </div>
 
        <div style="background-color: rgb(196, 212, 204); margin-left: 10%;" class="holdmessage" *ngFor="let message of myService.chatsArray[myIndex].myres">
-        <p>{{message}}</p>
+        <p>{{message.message}}</p>
+        <p class="mytime font-weight-bold w-100">{{message.time}}<i class="fa fa-check text-primary"></i><i class="fa fa-check fat text-primary"></i></p>
        </div>
       </div>
 
@@ -72,8 +73,8 @@
           <textarea formControlName="message" style="font-size: 18px;" (input)="handleSel()" name="" >
           </textarea>
           <input disabled *ngIf="see" type="text" placeholder="Type a message">
-          <i *ngIf="!seen" class="fa fa-microphone text-white"></i>
-          <i *ngIf="seen" class="fa fa-send text-white"></i>
+          <i [hidden]="seen" class="fa fa-microphone text-white"></i>
+          <i (click)="handleMessage()" [hidden]="!seen" class="fa fa-send text-white"></i>
           <div class="over">
             <div class="d-flex">
              <i class="fa fa-home"></i>
